@@ -12,10 +12,6 @@ abstract contract ERC721ANonCustodialStaking is ERC721A {
     // for each token, stores the total amount of time staked in block time
     mapping(uint256 => uint256) public tokenToBlockNumberStakedCumulative;
     
-    // this is a multipler to convert number of blocks to token count
-    // defaulted to 1
-    uint256 private multiplier = 1;
-
     // this is a divisor to convert number of blocks to token count
     // defaulted to 1
     uint256 private divisor = 1;
