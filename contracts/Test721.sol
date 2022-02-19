@@ -19,6 +19,7 @@ contract Test721 is ERC721ANonCustodialStaking, Ownable, Pausable, ReentrancyGua
 
     constructor() ERC721A("Test721", "TEST721") {
         _pause();
+        setMultiplier(20); // every hour staked you earn 20 tokens
     }
 
     modifier callerIsUser() {

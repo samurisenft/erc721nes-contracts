@@ -7,12 +7,11 @@ import './ERC721A.sol';
 
 abstract contract ERC721ANonCustodialStaking is ERC721A {
 
-    //mapping(uint256 => bool) public stakedTokenIds;
-    mapping(address => bool) public approvedContractStaker;
     mapping(uint256 => uint256) public tokenToBlockTimeStampStaked;
     mapping(uint256 => uint256) public tokenToBlockTimeStakedCumulative;
     
-    // this is a multipler to convert time staked to account balance
+    // this is a multipler to convert time staked in hours to token count
+    // defaulted to 1
     uint256 private multiplier = 1;
     uint256 private blockStartTime;
 
