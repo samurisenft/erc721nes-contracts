@@ -1,0 +1,12 @@
+__pycache__
+.history
+.hypothesis/
+build/
+reports/
+.env
+.DS_STORE
+artifacts/
+cache/
+node_modules/
+secrets.json*
+output.txt
