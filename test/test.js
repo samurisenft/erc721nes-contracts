@@ -5,6 +5,11 @@ const { privateKeyServerSide, infuraProjectId, mnemonic, etherscanApiKey } = req
 const { use, expect } = require("chai");
 const { ethers } = require("hardhat");
 
+async function mineNBlocks(n) {
+  for (let index = 0; index < n; index++) {
+    await ethers.provider.send('evm_mine');
+  }
+}
 
 describe("Token contract", function () {
   let Token;
@@ -55,24 +60,6 @@ describe("Token contract", function () {
       
     });
 
-  
-
-    it("calling allowlist mint with map should mint happy case", async function () {
-      const nonce = 0;
-      const localHash = soliditySha3(addr1['address'] , nonce);
-      
-      console.log(`localHash: ${localHash}`);
-      const signature = web3.eth.accounts.sign(localHash, privateKey)['signature'];
-
-      console.log(`signature ${signature}`)
-      const trx = await hardhatToken.connect(addr1).allowListMintMap(signature, nonce, {value: '47000000000000000' });
-      
-      const receipt = await trx.wait();
-        
-      const addr1Balance = await hardhatToken.balanceOf(addr1.address);
-      expect(addr1Balance.toNumber()).to.equal(1);
-      
-    });
 
     it("calling allowlist mint and stake should mint happy case", async function () {
       const nonce = 0;
@@ -90,6 +77,31 @@ describe("Token contract", function () {
       expect(addr1Balance.toNumber()).to.equal(1);
       
     });
+
+    it("staking acrrues balance at correct rate", async function () {
+      const nonce = 0;
+      const localHash = soliditySha3(addr1['address'] , nonce);
+      
+      console.log(`localHash: ${localHash}`);
+      const signature = web3.eth.accounts.sign(localHash, privateKey)['signature'];
+
+      console.log(`signature ${signature}`)
+      const trx = await hardhatToken.connect(addr1).allowListMintAndStake(signature, nonce, {value: '47000000000000000' });
+      
+      const receipt = await trx.wait();
+        
+      const addr1Balance = await hardhatToken.balanceOf(addr1.address);
+      expect(addr1Balance.toNumber()).to.equal(1);
+
+      await mineNBlocks(26);
+      //expect(await hardhatToken.getCurrentAdditionalBalance(0)).to.equal(1);
+      expect(await hardhatToken.getStakedCumulativeBalance(0)).to.equal(1);
+      await mineNBlocks(260-26);
+      expect(await hardhatToken.getStakedCumulativeBalance(0)).to.equal(10);
+      await mineNBlocks(10);
+      expect(await hardhatToken.getStakedCumulativeBalance(0)).to.equal(10);
+    });
+
 
   });  
 

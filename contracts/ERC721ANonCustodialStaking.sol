@@ -7,43 +7,49 @@ import './ERC721A.sol';
 
 abstract contract ERC721ANonCustodialStaking is ERC721A {
 
-    mapping(uint256 => uint256) public tokenToBlockTimeStampStaked;
-    mapping(uint256 => uint256) public tokenToBlockTimeStakedCumulative;
+    // for each token, stores the latest block number
+    mapping(uint256 => uint256) public tokenToBlockNumberStaked;
+    // for each token, stores the total amount of time staked in block time
+    mapping(uint256 => uint256) public tokenToBlockNumberStakedCumulative;
     
-    // this is a multipler to convert time staked in hours to token count
+    // this is a multipler to convert number of blocks to token count
     // defaulted to 1
     uint256 private multiplier = 1;
-    uint256 private blockStartTime;
 
-    function setMultiplier(uint256 _multiplier) public {
-        multiplier = _multiplier;
+    // this is a divisor to convert number of blocks to token count
+    // defaulted to 1
+    uint256 private divisor = 1;
+
+    function setDivisor(uint256 _divisor) public {
+        divisor = _divisor;
     }
 
     function getCurrentAdditionalBalance(uint256 tokenId) public view returns (uint256) {
-        return block.timestamp - tokenToBlockTimeStakedCumulative[tokenId];
+        return block.number - tokenToBlockNumberStakedCumulative[tokenId];
     }
 
+    // gets the balance of staking rewards 
     function getStakedCumulativeBalance(uint256 tokenId) public view returns (uint256){
-        return ((tokenToBlockTimeStakedCumulative[tokenId] + getCurrentAdditionalBalance(tokenId)) / 60 / 60) * multiplier;
+        return ((tokenToBlockNumberStakedCumulative[tokenId] + getCurrentAdditionalBalance(tokenId))) / divisor;
     }
 
     function isStaked(uint256 tokenId) public view returns (bool) {
-        return tokenToBlockTimeStampStaked[tokenId] != 0;
+        return tokenToBlockNumberStaked[tokenId] != 0;
     }
 
     function stake(uint256 tokenId) public {
         require(ownerOf(tokenId) == msg.sender, "You are not the owner of this token");
         require(!isStaked(tokenId), "token is already staked");
         
-        tokenToBlockTimeStampStaked[tokenId] = block.timestamp;
+        tokenToBlockNumberStaked[tokenId] = block.number;
     }
 
     function unstake(uint256 tokenId) public {
         require(ownerOf(tokenId) == msg.sender, "You are not the owner of this token");
         require(isStaked(tokenId), "token isn't staked");
         
-        tokenToBlockTimeStakedCumulative[tokenId] += block.timestamp - tokenToBlockTimeStakedCumulative[tokenId];
-        tokenToBlockTimeStampStaked[tokenId] = 0; // setting to 0 indicates a token is unstaked
+        tokenToBlockNumberStakedCumulative[tokenId] += block.number - tokenToBlockNumberStakedCumulative[tokenId];
+        tokenToBlockNumberStaked[tokenId] = 0; // setting to 0 indicates a token is unstaked
     }
 
     function _safemintAndStake(address to, uint256 quantity) internal {
@@ -51,7 +57,7 @@ abstract contract ERC721ANonCustodialStaking is ERC721A {
  
         for(uint256 i = 0; i < quantity; i++){
             startTokenId++;
-            tokenToBlockTimeStampStaked[startTokenId] = block.timestamp;
+            tokenToBlockNumberStaked[startTokenId] = block.number;
         }
         _safeMint(to, quantity, '');
     }
@@ -61,7 +67,7 @@ abstract contract ERC721ANonCustodialStaking is ERC721A {
  
         for(uint256 i = 0; i < quantity; i++){
             startTokenId++;
-            tokenToBlockTimeStampStaked[startTokenId] = block.timestamp;
+            tokenToBlockNumberStaked[startTokenId] = block.number;
         }
         _mint(to, quantity, '', false);
     }
