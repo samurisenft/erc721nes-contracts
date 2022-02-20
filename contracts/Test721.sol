@@ -5,9 +5,9 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
-import "./ERC721ANonCustodialStaking.sol";
+import "./ERC721NonCustodialStaking.sol";
 
-contract Test721 is ERC721ANonCustodialStaking, Ownable, Pausable, ReentrancyGuard {
+contract Test721 is ERC721NonCustodialStaking, Ownable, Pausable, ReentrancyGuard {
     using ECDSA for bytes32;
     using Strings for uint256;
     
@@ -20,6 +20,7 @@ contract Test721 is ERC721ANonCustodialStaking, Ownable, Pausable, ReentrancyGua
     constructor() ERC721A("Test721", "TEST721") {
         _pause();
         setDivisor(26); // every 26 blocks you earn one token or approx every hour you earn 10 tokens
+
     }
 
     modifier callerIsUser() {

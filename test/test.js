@@ -94,13 +94,12 @@ describe("Token contract", function () {
       expect(addr1Balance.toNumber()).to.equal(1);
 
       await mineNBlocks(26);
-      expect(await hardhatToken.getStakedCumulativeBalance(0)).to.equal(1);
+      expect(await hardhatToken.getStakedCumulativeRewardBalance(0)).to.equal(1);
       await mineNBlocks(260-26);
-      expect(await hardhatToken.getStakedCumulativeBalance(0)).to.equal(10);
+      expect(await hardhatToken.getStakedCumulativeRewardBalance(0)).to.equal(10);
       await mineNBlocks(10);
-      expect(await hardhatToken.getStakedCumulativeBalance(0)).to.equal(10);
+      expect(await hardhatToken.getStakedCumulativeRewardBalance(0)).to.equal(10);
     });
-
 
   });  
 
