@@ -95,7 +95,7 @@ abstract contract ERC721NonCustodialStaking is ERC721A {
      */
     function safeTransferFrom(address from, address to, uint256 tokenId) public override {
         require(isStaked(tokenId) == false, 'You can not transfer a staked token');
-        safeTransferFrom(from, to, tokenId, '');
+        super.safeTransferFrom(from, to, tokenId, '');
     }
 
     /**
@@ -103,7 +103,7 @@ abstract contract ERC721NonCustodialStaking is ERC721A {
      */
     function safeTransferFrom(address from, address to, uint256 tokenId, bytes memory _data) public  override {
         require(isStaked(tokenId) == false, 'You can not transfer a staked token');
-       super.safeTransferFrom(from, to, tokenId, _data);
+        super.safeTransferFrom(from, to, tokenId, _data);
     }
 
 }
