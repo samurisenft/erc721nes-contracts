@@ -6,7 +6,7 @@ pragma solidity ^0.8.9;
 import './ERC721A.sol';
 import "hardhat/console.sol";
 
-abstract contract ERC721NCS is ERC721A {
+abstract contract ERC721NES is ERC721A {
 
     address stakingController;
     // for each token, stores the current block.number or block.timestamp

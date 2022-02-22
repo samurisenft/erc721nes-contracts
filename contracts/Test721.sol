@@ -7,9 +7,9 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
-import "./ERC721NCS.sol";
+import "./ERC721NES.sol";
 
-contract Test721 is ERC721NCS, Ownable, Pausable, ReentrancyGuard {
+contract Test721 is ERC721NES, Ownable, Pausable, ReentrancyGuard {
     using ECDSA for bytes32;
     using Strings for uint256;
     

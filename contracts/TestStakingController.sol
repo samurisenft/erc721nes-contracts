@@ -1,6 +1,6 @@
 pragma solidity ^0.8.9;
 
-import "./ERC721NCS.sol";
+import "./ERC721NES.sol";
 import "hardhat/console.sol";
 
 contract TestStakingController {
@@ -13,18 +13,18 @@ contract TestStakingController {
     }
     
     function getStakingRewards(uint256 tokenId) public view returns(uint256) { 
-        return ERC721NCS(tokenContract).getStakedCumulativeStakedBalance(tokenId) / divisor; // allows for toke accumulation at ~ 10 per hour
+        return ERC721NES(tokenContract).getStakedCumulativeStakedBalance(tokenId) / divisor; // allows for toke accumulation at ~ 10 per hour
     }
 
     function stake(uint256 tokenId) public {
-        require(ERC721NCS(tokenContract).ownerOf(tokenId) == msg.sender, "You are not the owner of this token");
+        require(ERC721NES(tokenContract).ownerOf(tokenId) == msg.sender, "You are not the owner of this token");
         
-        ERC721NCS(tokenContract).stake(tokenId, msg.sender);
+        ERC721NES(tokenContract).stake(tokenId, msg.sender);
     }
 
     function unstake(uint256 tokenId) public {
-        require(ERC721NCS(tokenContract).ownerOf(tokenId) == msg.sender, "You are not the owner of this token");
+        require(ERC721NES(tokenContract).ownerOf(tokenId) == msg.sender, "You are not the owner of this token");
         
-        ERC721NCS(tokenContract).unstake(tokenId, msg.sender);
+        ERC721NES(tokenContract).unstake(tokenId, msg.sender);
     }
 }
