@@ -21,7 +21,7 @@ describe("Token contract", function () {
   let addrs;
   let privateKey = privateKeyServerSide;
   
-  var web3 = new Web3('https://mainnet.infura.io/v3/908e29044bcc435e9183aae2ba70e625'); // your geth
+  var web3 = new Web3(`https://mainnet.infura.io/v3/${infuraProjectId}`); // your geth
 
   beforeEach(async function () {
 
