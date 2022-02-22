@@ -1,13 +1,15 @@
-pragma solidity ^0.8.4;
+// SPDX-License-Identifier: MIT
+// Creator: base64.tech
+pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
-import "./ERC721NonCustodialStaking.sol";
+import "./ERC721NCS.sol";
 
-contract Test721 is ERC721NonCustodialStaking, Ownable, Pausable, ReentrancyGuard {
+contract Test721 is ERC721NCS, Ownable, Pausable, ReentrancyGuard {
     using ECDSA for bytes32;
     using Strings for uint256;
     
@@ -15,12 +17,10 @@ contract Test721 is ERC721NonCustodialStaking, Ownable, Pausable, ReentrancyGuar
     uint256 public constant TOKEN_PRICE = .047 ether;
     uint256 public mintIndex=0;
     address public signatureVerifier;
-    mapping(address => uint256) public addressToAmountWLMintedSoFar; 
 
-    constructor() ERC721A("Test721", "TEST721") {
+    constructor(bool _blockNumberBased) ERC721A("Test721", "TEST721") {
         _pause();
-        setDivisor(26); // every 26 blocks you earn one token or approx every hour you earn 10 tokens
-
+        setBlockNumberBased(_blockNumberBased);
     }
 
     modifier callerIsUser() {
@@ -35,6 +35,8 @@ contract Test721 is ERC721NonCustodialStaking, Ownable, Pausable, ReentrancyGuar
         return hash;
     }
 
+
+
     function allowListMint(bytes memory _signature, uint256 _nonce) whenNotPaused payable callerIsUser external {
         require(msg.value >= TOKEN_PRICE, "Need to send more ETH.");
         require(numberMinted(msg.sender) + 1 < 2, "1 allow list mint per wallet allocation exceeded");
@@ -46,7 +48,6 @@ contract Test721 is ERC721NonCustodialStaking, Ownable, Pausable, ReentrancyGuar
         unchecked {
             mintIndex++;
         }
-        
     }
 
     function allowListMintAndStake(bytes memory _signature, uint256 _nonce) whenNotPaused payable callerIsUser external {
@@ -84,7 +85,6 @@ contract Test721 is ERC721NonCustodialStaking, Ownable, Pausable, ReentrancyGuar
         return _numberMinted(owner);
     }
 
- 
     function getOwnershipData(uint256 tokenId)
         external
         view

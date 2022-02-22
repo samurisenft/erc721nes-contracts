@@ -4,30 +4,28 @@
 pragma solidity ^0.8.9;
 
 import './ERC721A.sol';
+import "hardhat/console.sol";
 
-abstract contract ERC721NonCustodialStaking is ERC721A {
+abstract contract ERC721NCS is ERC721A {
 
+    address stakingController;
     // for each token, stores the current block.number or block.timestamp
     // if token is mapped to 0, it is currently unstaked
     mapping(uint256 => uint256) public tokenToWhenStaked;
     // for each token, stores the total duration staked 
-    // measured by block.timestamp or block.timestamp 
+    // measured by block.number or block.timestamp 
     mapping(uint256 => uint256) public tokenToTotalDurationStaked;
     
-    // this is a divisor to convert balance of (blocks or timestamp) duration
-    // to token count, defaulted to 1
-    uint256 private divisor = 1;
-
     // determines whether token balance is calculated based off of 
     // block.number or block.timestamp, defaults to block.number
     bool private blockNumberBased = true;
 
-    function setBlockNumberBased(bool _blockNumberBased) public {
-        blockNumberBased = _blockNumberBased;
+    function setStakingController(address _stakingController) public {
+        stakingController = _stakingController;
     }
 
-    function setDivisor(uint256 _divisor) public {
-        divisor = _divisor;
+    function setBlockNumberBased(bool _blockNumberBased) public {
+        blockNumberBased = _blockNumberBased;
     }
 
     function getBlockNumberOrTimeStamp() private view returns (uint256) {
@@ -38,24 +36,23 @@ abstract contract ERC721NonCustodialStaking is ERC721A {
         return  getBlockNumberOrTimeStamp() - tokenToWhenStaked[tokenId];
     }
 
-    // gets the duration staked and converts to a reward balance
-    function getStakedCumulativeRewardBalance(uint256 tokenId) public view returns (uint256){
-        return ((tokenToTotalDurationStaked[tokenId] + getCurrentAdditionalBalance(tokenId))) / divisor;
+    // returns the total duration staked 
+    function getStakedCumulativeStakedBalance(uint256 tokenId) public view returns (uint256){
+        return tokenToTotalDurationStaked[tokenId] + getCurrentAdditionalBalance(tokenId);
     }
 
     function isStaked(uint256 tokenId) public view returns (bool) {
         return tokenToWhenStaked[tokenId] != 0;
     }
 
-    function stake(uint256 tokenId) public {
-        require(ownerOf(tokenId) == msg.sender, "You are not the owner of this token");
+    function stake(uint256 tokenId, address originator) public {
+        require( ownerOf(tokenId) == msg.sender || (ownerOf(tokenId) == originator && msg.sender == stakingController), "Originator is not the owner of this token");
         require(!isStaked(tokenId), "token is already staked");
-        
         tokenToWhenStaked[tokenId] = getBlockNumberOrTimeStamp();
     }
 
-    function unstake(uint256 tokenId) public {
-        require(ownerOf(tokenId) == msg.sender, "You are not the owner of this token");
+    function unstake(uint256 tokenId, address originator) public {
+        require( ownerOf(tokenId) == msg.sender || (ownerOf(tokenId) == originator && msg.sender == stakingController), "Originator is not the owner of this token");
         require(isStaked(tokenId), "token isn't staked");
         
         tokenToTotalDurationStaked[tokenId] += getCurrentAdditionalBalance(tokenId);
