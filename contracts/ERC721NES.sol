@@ -39,7 +39,7 @@ abstract contract ERC721NES is ERC721A {
      *  to requiring setting the staking controller contact upon deployment or requires 
      *  a public OnlyOwner helper method to be exposed in the implementing contract.
      */
-    function setStakingController(address _stakingController) internal {
+    function _setStakingController(address _stakingController) internal {
         stakingController = _stakingController;
     }
 
@@ -48,7 +48,7 @@ abstract contract ERC721NES is ERC721A {
      *  to requiring setting the the duration accounting method upon deployment or requires 
      *  a a public OnlyOwner helper method to be exposed in the implementing contract.
      */
-    function setBlockNumberBased(bool _blockNumberBased) internal {
+    function _setBlockNumberBased(bool _blockNumberBased) internal {
         blockNumberBased = _blockNumberBased;
     }
 

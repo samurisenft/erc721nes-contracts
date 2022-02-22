@@ -20,7 +20,7 @@ contract Test721 is ERC721NES, Ownable, Pausable, ReentrancyGuard {
 
     constructor(bool _blockNumberBased) ERC721A("Test721", "TEST721") {
         _pause();
-        setBlockNumberBased(_blockNumberBased);
+        _setBlockNumberBased(_blockNumberBased);
     }
 
     modifier callerIsUser() {
@@ -28,8 +28,8 @@ contract Test721 is ERC721NES, Ownable, Pausable, ReentrancyGuard {
         _;
     }
 
-    function setInternalStakingController(address _stakingController) public onlyOwner {
-        setStakingController(_stakingController);
+    function setStakingController(address _stakingController) public onlyOwner {
+        _setStakingController(_stakingController);
     }
 
     function hashMessage(address sender, uint256 nonce) public pure returns(bytes32) {
