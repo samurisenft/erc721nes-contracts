@@ -6,7 +6,6 @@ pragma solidity ^0.8.9;
 import './ERC721A.sol';
 import "hardhat/console.sol";
 
-
 /**
  *  @dev Extension of https://eips.ethereum.org/EIPS/eip-721[ERC721] Non-Fungible Token Standard,
  *  that allows for Non Escrow Staking. By calling the staking operation on a token, you disable 
@@ -17,11 +16,11 @@ import "hardhat/console.sol";
  *  or the standard Open Zeppelin version.
  */ 
 abstract contract ERC721NES is ERC721A {
-
+    
     // This is an optional reference to an external contract allows
     // you to abstract away your staking interface to another contract.
     address stakingController;
-    
+      
     // For each token, this map stores the current block.number or block.timestamp
     // if token is mapped to 0, it is currently unstaked.
     mapping(uint256 => uint256) public tokenToWhenStaked;
@@ -34,23 +33,27 @@ abstract contract ERC721NES is ERC721A {
     // calculated based off of block.number or block.timestamp.
     // Defaults to block.number.
     bool private blockNumberBased = true;
-    
+
     /**
-     *  @dev sets stakingController
+     *  @dev sets stakingController, scope of this method is internal, so this defaults
+     *  to requiring setting the staking controller contact upon deployment or requires 
+     *  a public OnlyOwner helper method to be exposed in the implementing contract.
      */
-    function setStakingController(address _stakingController) public {
+    function setStakingController(address _stakingController) internal {
         stakingController = _stakingController;
     }
 
     /**
-     *  @dev sets setBlockNumberBased
+     *  @dev sets setBlockNumberBased, scope of this method is internal, so this defaults
+     *  to requiring setting the the duration accounting method upon deployment or requires 
+     *  a a public OnlyOwner helper method to be exposed in the implementing contract.
      */
-    function setBlockNumberBased(bool _blockNumberBased) public {
+    function setBlockNumberBased(bool _blockNumberBased) internal {
         blockNumberBased = _blockNumberBased;
     }
 
     /**
-     *  @dev utility method to provide block.number or block timestamp
+     *  @dev utility method to provide block.number or block.timestamp
      */
     function getBlockNumberOrTimeStamp() private view returns (uint256) {
         return (blockNumberBased == true ? block.number: block.timestamp);
@@ -83,7 +86,7 @@ abstract contract ERC721NES is ERC721A {
      *  you disable the ability to transfer the token.
      */
     function stake(uint256 tokenId, address originator) public {
-        require( ownerOf(tokenId) == msg.sender || (ownerOf(tokenId) == originator && msg.sender == stakingController), "Originator is not the owner of this token");
+        require(ownerOf(tokenId) == msg.sender || (ownerOf(tokenId) == originator && msg.sender == stakingController), "Originator is not the owner of this token");
         require(!isStaked(tokenId), "token is already staked");
         tokenToWhenStaked[tokenId] = getBlockNumberOrTimeStamp();
     }
@@ -94,7 +97,7 @@ abstract contract ERC721NES is ERC721A {
      *  you re-enable the ability to transfer the token.
      */
     function unstake(uint256 tokenId, address originator) public {
-        require( ownerOf(tokenId) == msg.sender || (ownerOf(tokenId) == originator && msg.sender == stakingController), "Originator is not the owner of this token");
+        require(ownerOf(tokenId) == msg.sender || (ownerOf(tokenId) == originator && msg.sender == stakingController), "Originator is not the owner of this token");
         require(isStaked(tokenId), "token isn't staked");
         
         tokenToTotalDurationStaked[tokenId] += getCurrentAdditionalBalance(tokenId);

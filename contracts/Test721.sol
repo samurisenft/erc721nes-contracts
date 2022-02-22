@@ -28,6 +28,10 @@ contract Test721 is ERC721NES, Ownable, Pausable, ReentrancyGuard {
         _;
     }
 
+    function setInternalStakingController(address _stakingController) public onlyOwner {
+        setStakingController(_stakingController);
+    }
+
     function hashMessage(address sender, uint256 nonce) public pure returns(bytes32) {
         bytes32 hash = keccak256(abi.encodePacked(
             "\x19Ethereum Signed Message:\n32",

@@ -37,7 +37,7 @@ describe("Token contract", function () {
     Token = await ethers.getContractFactory("TestStakingController");
     testStakingController = await Token.deploy(test721Token.address, 26);    
 
-    await test721Token.setStakingController(testStakingController.address);
+    await test721Token.setInternalStakingController(testStakingController.address);
 
   });
 
