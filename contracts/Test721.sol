@@ -35,8 +35,6 @@ contract Test721 is ERC721NES, Ownable, Pausable, ReentrancyGuard {
         return hash;
     }
 
-
-
     function allowListMint(bytes memory _signature, uint256 _nonce) whenNotPaused payable callerIsUser external {
         require(msg.value >= TOKEN_PRICE, "Need to send more ETH.");
         require(numberMinted(msg.sender) + 1 < 2, "1 allow list mint per wallet allocation exceeded");
@@ -62,8 +60,6 @@ contract Test721 is ERC721NES, Ownable, Pausable, ReentrancyGuard {
             mintIndex++;
         }
     }
-
-    
 
     // // metadata URI
     string private _baseTokenURI;

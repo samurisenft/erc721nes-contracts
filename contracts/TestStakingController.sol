@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// Creator: base64.tech
 pragma solidity ^0.8.9;
 
 import "./ERC721NES.sol";
@@ -13,7 +15,7 @@ contract TestStakingController {
     }
     
     function getStakingRewards(uint256 tokenId) public view returns(uint256) { 
-        return ERC721NES(tokenContract).getStakedCumulativeStakedBalance(tokenId) / divisor; // allows for toke accumulation at ~ 10 per hour
+        return ERC721NES(tokenContract).getCumulativeDurationStaked(tokenId) / divisor; // allows for toke accumulation at ~ 10 per hour
     }
 
     function stake(uint256 tokenId) public {

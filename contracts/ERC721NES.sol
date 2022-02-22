@@ -37,7 +37,7 @@ abstract contract ERC721NES is ERC721A {
     }
 
     // returns the total duration staked 
-    function getStakedCumulativeStakedBalance(uint256 tokenId) public view returns (uint256){
+    function getCumulativeDurationStaked(uint256 tokenId) public view returns (uint256){
         return tokenToTotalDurationStaked[tokenId] + getCurrentAdditionalBalance(tokenId);
     }
 

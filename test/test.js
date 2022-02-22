@@ -148,7 +148,7 @@ describe("Token contract", function () {
 
       await expect(test721Token.transferFrom(addr1.address, addr2.address, 0)).to.be.revertedWith("You can not transfer a staked token");
 
-      const trx2 = await testStakingController.connect(addr1).unstake(0);
+      const trx3 = await testStakingController.connect(addr1).unstake(0);
     });
     
 
