@@ -128,7 +128,7 @@ abstract contract ERC721NES is ERC721A {
     }
 
     /**
-     * @dev See {IERC721-transferFrom}.
+     * @dev overrides transferFrom to prevent transfer if token is staked
      */
     function transferFrom(address from, address to, uint256 tokenId) public override {
         require(isStaked(tokenId) == false, 'You can not transfer a staked token');
@@ -136,7 +136,7 @@ abstract contract ERC721NES is ERC721A {
     }
 
     /**
-     * @dev See {IERC721-safeTransferFrom}.
+     * @dev overrides safeTransferFrom to prevent transfer if token is staked
      */
     function safeTransferFrom(address from, address to, uint256 tokenId) public override {
         require(isStaked(tokenId) == false, 'You can not transfer a staked token');
@@ -144,7 +144,7 @@ abstract contract ERC721NES is ERC721A {
     }
 
     /**
-     * @dev See {IERC721-safeTransferFrom}.
+     * @dev overrides safeTransferFrom to prevent transfer if token is staked
      */
     function safeTransferFrom(address from, address to, uint256 tokenId, bytes memory _data) public  override {
         require(isStaked(tokenId) == false, 'You can not transfer a staked token');
