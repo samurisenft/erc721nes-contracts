@@ -10,8 +10,8 @@ import "hardhat/console.sol";
 /**
  *  @dev Extension of https://eips.ethereum.org/EIPS/eip-721[ERC721] Non-Fungible Token Standard,
  *  that allows for Non Escrow Staking. By calling the staking operation on a token, you disable 
- *  the ability to transfer the token. Balances of duration staked is captured and can be utilized 
- *  to facilitate functional logic around rewards granted for staking. 
+ *  the ability to transfer the token. The duration a token is staked is stored and can be utilized 
+ *  to facilitate functional logic around rewards granted for staking.
  *  
  *  This implementation extends ERC721A, but can be modified to extend your own ERC721 implementation 
  *  or the standard Open Zeppelin version.
