@@ -19,54 +19,24 @@ describe("Token contract", function () {
   let addr1;
   let addr2;
   let addrs;
-  let privateKey = privateKeyServerSide;
   
-  var web3 = new Web3(`https://mainnet.infura.io/v3/${infuraProjectId}`); // your geth
-
   beforeEach(async function () {
-
-    // Get the ContractFactory and Signers here.
-    Token = await ethers.getContractFactory("Test721");
+    TokenFactory = await ethers.getContractFactory("ERC721NESTestImpl");
     [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
 
-    test721Token = await Token.deploy(true);
-    await test721Token.setSignatureVerifier('0x2f87a2ef76a3389f3b95da865be8667fe53d956a');
+    test721Token = await TokenFactory.deploy();
 
-    await test721Token.unpause();
+    TokenFactory = await ethers.getContractFactory("TestStakingController");
+    [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
+
+    test721Token = await TokenFactory.deploy();
 
     Token = await ethers.getContractFactory("TestStakingController");
     testStakingController = await Token.deploy(test721Token.address, 26);    
-
     await test721Token.setInternalStakingController(testStakingController.address);
 
   });
 
-   describe("Transactions", function () {
-    it("calling hash method matches calling it from server side", async function () {
-      //const localHash = web3.eth.accounts.sign(owner['address'] + '0', privateKey)['signature'];
-      const localHash = soliditySha3("\x19Ethereum Signed Message:\n32", soliditySha3(owner['address'] , 0));
-
-      const hash = await test721Token.hashMessage(owner['address'], 0);
-
-      expect(hash).to.equal(localHash);
-    });
-
-    it("calling allowlist mint should mint happy case", async function () {
-      const nonce = 0;
-      const localHash = soliditySha3(addr1['address'] , nonce);
-      
-      console.log(`localHash: ${localHash}`);
-      const signature = web3.eth.accounts.sign(localHash, privateKey)['signature'];
-
-      console.log(`signature ${signature}`)
-      const trx = await test721Token.connect(addr1).allowListMint(signature, nonce, {value: '47000000000000000' });
-      
-      const receipt = await trx.wait();
-        
-      const addr1Balance = await test721Token.balanceOf(addr1.address);
-      expect(addr1Balance.toNumber()).to.equal(1);
-      
-    });
 
 
     it("calling allowlist mint and stake should mint happy case", async function () {
@@ -131,14 +101,8 @@ describe("Token contract", function () {
 
     it("staking / unstaking from staking controller contract works", async function () {
       const nonce = 0;
-      const localHash = soliditySha3(addr1['address'] , nonce);
-      
-      console.log(`localHash: ${localHash}`);
-      const signature = web3.eth.accounts.sign(localHash, privateKey)['signature'];
-
-      console.log(`signature ${signature}`)
-      const trx = await test721Token.connect(addr1).allowListMint(signature, nonce, {value: '47000000000000000' });
-      
+     
+      const trx = await test721Token.connect(addr1).mint();
       const receipt = await trx.wait();
         
       const addr1Balance = await test721Token.balanceOf(addr1.address);
