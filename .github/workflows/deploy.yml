@@ -32,13 +32,13 @@ jobs:
       with:
         node-version: 16
         registry-url: https://registry.npmjs.org/
+    - run: |
+        git config --global user.name "ERC-721 NES"
+        git config --global user.email "no-reply@dev.null"
+        git push
     - run: npm ci
     - run: cp contracts/ERC721NES.sol ./ERC721NES.sol
     - run: npm version patch
     - run: npm publish --access public
       env:
         NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-    - run: |
-        git config --global user.name "ERC-721 NES"
-        git config --global user.email "no-reply@dev.null"
-        git push
