@@ -63,8 +63,20 @@ We are always eager to improve and adopt new ideas, please feel free to make sug
 
 # Other Non Custodial Staking Implementations 
 
-- [OwlOfMoistness](https://twitter.com/OwlOfMoistness) [`LockRegistry`](https://github.com/OwlOfMoistness/erc721-lock-registry)
-  Provides a really cool abstraction for non-custodial staking with multiple staking instances. It also paves the way for Owl's on-chain "2FA" concept, which is potentially groundbreaking for improving user security.
+## LockRegistry
 
-- SmolBrain's [`SmolSchool`][https://arbiscan.io/address/0x6325439389e0797ab35752b4f43a14c004f22a9c#code]
+- **Author**  
+  [OwlOfMoistness](https://twitter.com/OwlOfMoistness)
+- **Description**  
+  Provides a really cool abstraction for non-custodial staking with multiple staking instances. It also paves the way for Owl's on-chain "2FA" concept, which is potentially groundbreaking for improving user security.
+- **Source**  
+  https://github.com/OwlOfMoistness/erc721-lock-registry
+
+## SmolSchool
+
+- **Author**
+  [SmolVerse](https://www.smolverse.lol/)
+- **Description**  
   AFAIK, one of the first implementations of a "non-custodial staking" that we've found. This pattern continues to be adopted across the Treasure Ecosystem, and can be found in Bridgeworld's Legions as well.
+- **Source**  
+  https://arbiscan.io/address/0x6325439389e0797ab35752b4f43a14c004f22a9c#code
