@@ -5,6 +5,10 @@ pragma solidity ^0.8.9;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./ERC721NES.sol";
 
+/**
+ *  @dev This is a sample implementation of a ERC721NES that does not utilize a separate
+ *  Staking Controller contract and include both minting and staking logic inline.
+ */
 contract ERC721NESTestBasicImpl is ERC721NES, Ownable {
     // block number multiplier to determine the balance to accrue 
     // during the duration staked. Defaults to 1.
@@ -50,8 +54,6 @@ contract ERC721NESTestBasicImpl is ERC721NES, Ownable {
         return getCumulativeDurationStaked(tokenId) * multiplier; // allows for toke accumulation at ~ 10 per hour
     }
 
-    
-
     /**
      *  @dev Stakes a token and records the start block number or time stamp.
      */
@@ -72,6 +74,9 @@ contract ERC721NESTestBasicImpl is ERC721NES, Ownable {
         unstake(tokenId, msg.sender);
     }
 
+    /**
+     *  @dev Mints token.
+     */
     function mint(uint256 _quanity) external {
         _mint(msg.sender,_quanity, '', false);
     }

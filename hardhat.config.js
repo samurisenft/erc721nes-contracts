@@ -42,5 +42,5 @@ module.exports = {
     // Obtain one at https://etherscan.io/
     apiKey: `${apiKey}`
   },
-  solidity: "0.8.9"
+  solidity: "0.8.13"
 };

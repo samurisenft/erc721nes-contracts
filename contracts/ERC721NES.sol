@@ -1,10 +1,9 @@
 // SPDX-License-Identifier: MIT
 // Creator: base64.tech
 
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.13;
 
 import "./ERC721A.sol";
-import "hardhat/console.sol";
 
 /**
  *  @dev Extension of https://eips.ethereum.org/EIPS/eip-721[ERC721] Non-Fungible Token Standard,

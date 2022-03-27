@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: MIT
 // Creator: base64.tech
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.13;
 
 import "./ERC721NES.sol";
-import "hardhat/console.sol";
 
 /**
  *  @dev This is a sample implementation of a staking controller use in conjunction with
@@ -14,7 +13,6 @@ import "hardhat/console.sol";
  *  to a balance.
  */
 contract ERC721NESTestStakingController {
-    
     // Address of the ERC721 token contract
     address tokenContract;
     // block number multiplier to determine the balance to accrue 
@@ -76,7 +74,6 @@ contract ERC721NESTestStakingController {
      *  @dev Unstakes a token and records the start block number or time stamp.
      */
     function unstake(uint256 tokenId) public {
-        console.log(ERC721NES(tokenContract).ownerOf(tokenId));
         require(ERC721NES(tokenContract).ownerOf(tokenId) == msg.sender, "You are not the owner of this token");
 
         tokenToTotalDurationStaked[tokenId] += getCurrentAdditionalBalance(tokenId);

@@ -31,14 +31,14 @@ describe("Token contract", function () {
     await test721Token.setStakingController(testStakingController.address);
   });
 
-    it("calling mint and stake should mint happy case", async function () {
+    it("Staking Contoller Impl - calling mint and stake should mint happy case", async function () {
       const trx = await test721Token.connect(addr1).mint(1);        
       const addr1Balance = await test721Token.balanceOf(addr1.address);
       expect(await addr1Balance.toNumber()).to.equal(1);
       expect(await test721Token.isStaked(0)).to.equal(false);
     });
 
-    it("staking acrrues balance at correct rate when minting and then staking", async function () {
+    it("Staking Contoller Impl - staking acrrues balance at correct rate when minting and then staking", async function () {
       await test721Token.connect(addr1).mint(1);
       const addr1Balance = await test721Token.balanceOf(addr1.address);
      
@@ -59,7 +59,7 @@ describe("Token contract", function () {
       expect(await testStakingController.getStakingRewards(0)).to.equal(30);
     });
 
-    it("staking prevents transfer, unstakeing allows transfer", async function () {
+    it("Staking Contoller Impl - staking prevents transfer, unstakeing allows transfer", async function () {
       const trx = await test721Token.connect(addr1).mint(1);
       let addr1Balance = await test721Token.balanceOf(addr1.address);
       let addr2Balance = await test721Token.balanceOf(addr2.address);
