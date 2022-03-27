@@ -6,6 +6,7 @@
 
 # References
 <!-- Provide any resources that are beneficial to reviewers of this Pull Request. -->
+- N/A
 
 # Contribution Standards
 <!-- Confirm that your contributions are following the best practices and standards adopted by this repository. -->
