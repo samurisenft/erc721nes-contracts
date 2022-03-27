@@ -5,32 +5,30 @@ pragma solidity ^0.8.9;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./ERC721NES.sol";
 
+interface StakingControllerI {
+    function stake(uint256 tokenId) external;
+}
+
 contract ERC721NESTestImpl is ERC721NES, Ownable {
+    StakingControllerI stakingControllerInterface;
 
     constructor() ERC721A("ERC721NESTESTIMPL", "ERC721NESTestImpl") {
     }
 
     function setStakingController(address _stakingController) public onlyOwner {
         _setStakingController(_stakingController);
+        stakingControllerInterface = StakingControllerI(_stakingController);
     }
 
-    function mint() external {
-        _mint(msg.sender,1, '', false);
+    function mint(uint256 _quanity) external {
+        _mint(msg.sender,_quanity, '', false);
     }
 
-    function mintAndStake() external {
-        _mintAndStake(msg.sender,1);
+    function mintAndStake(uint256 _quanity) external {
+        uint256 startTokenId = _currentIndex;
+        _mint(msg.sender,_quanity, '', false);
+        for (uint256 i = startTokenId; i < _currentIndex; i++) { 
+            stakingControllerInterface.stake(i);
+        }
     }
-
-    //metadata URI
-    string private _baseTokenURI;
-
-    function _baseURI() internal view virtual override returns (string memory) {
-        return _baseTokenURI;
-    }
-
-    function setBaseURI(string calldata baseURI) external onlyOwner {
-        _baseTokenURI = baseURI;
-    }
-
 }

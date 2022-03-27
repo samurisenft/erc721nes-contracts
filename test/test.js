@@ -29,93 +29,53 @@ describe("Token contract", function () {
     TokenFactory = await ethers.getContractFactory("TestStakingController");
     [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
 
-    test721Token = await TokenFactory.deploy();
-
-    Token = await ethers.getContractFactory("TestStakingController");
-    testStakingController = await Token.deploy(test721Token.address, 26);    
-    await test721Token.setInternalStakingController(testStakingController.address);
+    TokenFactory = await ethers.getContractFactory("TestStakingController");
+    testStakingController = await TokenFactory.deploy(test721Token.address, 1);    
+    await test721Token.setStakingController(testStakingController.address);
 
   });
 
-
-
-    it("calling allowlist mint and stake should mint happy case", async function () {
-      const nonce = 0;
-      const localHash = soliditySha3(addr1['address'] , nonce);
-      
-      console.log(`localHash: ${localHash}`);
-      const signature = web3.eth.accounts.sign(localHash, privateKey)['signature'];
-
-      console.log(`signature ${signature}`)
-      const trx = await test721Token.connect(addr1).allowListMintAndStake(signature, nonce, {value: '47000000000000000' });
-      
-      const receipt = await trx.wait();
-        
+    it("calling mint and stake should mint happy case", async function () {
+      const trx = await test721Token.connect(addr1).mint(1);        
       const addr1Balance = await test721Token.balanceOf(addr1.address);
-      expect(addr1Balance.toNumber()).to.equal(1);
-      
+      expect(await addr1Balance.toNumber()).to.equal(1);
+      expect(await test721Token.isStaked(0)).to.equal(false);
     });
 
-    it("staking acrrues balance at correct rate", async function () {
-      const nonce = 0;
-      const localHash = soliditySha3(addr1['address'] , nonce);
-      
-      console.log(`localHash: ${localHash}`);
-      const signature = web3.eth.accounts.sign(localHash, privateKey)['signature'];
-
-      console.log(`signature ${signature}`)
-      const trx = await test721Token.connect(addr1).allowListMintAndStake(signature, nonce, {value: '47000000000000000' });
-      
-      const receipt = await trx.wait();
-        
+    it("staking acrrues balance at correct rate when minting and then staking", async function () {
+      await test721Token.connect(addr1).mint(1);
       const addr1Balance = await test721Token.balanceOf(addr1.address);
-      expect(addr1Balance.toNumber()).to.equal(1);
-
-      await mineNBlocks(26);
-      expect(await testStakingController.getStakingRewards(0)).to.equal(1);
-      await mineNBlocks(26);
-      expect(await testStakingController.getStakingRewards(0)).to.equal(2);
-      await mineNBlocks(26);
-      expect(await testStakingController.getStakingRewards(0)).to.equal(3);
-      await mineNBlocks(26);
-      expect(await testStakingController.getStakingRewards(0)).to.equal(4);
-      await mineNBlocks(26);
-      expect(await testStakingController.getStakingRewards(0)).to.equal(5);
-      await mineNBlocks(26);
-      expect(await testStakingController.getStakingRewards(0)).to.equal(6);
-      await mineNBlocks(26);
-      expect(await testStakingController.getStakingRewards(0)).to.equal(7);
-      await mineNBlocks(26);
-      expect(await testStakingController.getStakingRewards(0)).to.equal(8);
-      await mineNBlocks(26);
-      expect(await testStakingController.getStakingRewards(0)).to.equal(9);
-      await mineNBlocks(26);
+      expect(await addr1Balance.toNumber()).to.equal(1);
+      expect(await testStakingController.getStakingRewards(0)).to.equal(0);
+      await testStakingController.connect(addr1).stake(0);
+      await mineNBlocks(10);
       expect(await testStakingController.getStakingRewards(0)).to.equal(10);
-      await mineNBlocks(26);
-      expect(await testStakingController.getStakingRewards(0)).to.equal(11);
-      await mineNBlocks(1);
-      expect(await testStakingController.getStakingRewards(0)).to.equal(11);
+      await mineNBlocks(10);
+      expect(await testStakingController.getStakingRewards(0)).to.equal(20);
+    });
 
-
+    it("staking acrrues balance at correct rate when performing mintAndStake", async function () {
+      console.log(`owner ${owner.address}`);
+      await test721Token.connect(addr1).mintAndStake(2);
+      const addr1Balance = await test721Token.balanceOf(addr1.address);
+      expect(await addr1Balance.toNumber()).to.equal(2);
+      // expect(await testStakingController.getStakingRewards(0)).to.equal(0);
+      // expect(await testStakingController.getStakingRewards(1)).to.equal(0);
+      // await mineNBlocks(10);
+      // expect(await testStakingController.getStakingRewards(0)).to.equal(10);
+      // expect(await testStakingController.getStakingRewards(1)).to.equal(20);
+      // await mineNBlocks(10);
+      // expect(await testStakingController.getStakingRewards(0)).to.equal(20);
+      // expect(await testStakingController.getStakingRewards(1)).to.equal(20);
     });
 
     it("staking / unstaking from staking controller contract works", async function () {
-      const nonce = 0;
-     
-      const trx = await test721Token.connect(addr1).mint();
-      const receipt = await trx.wait();
-        
+      const trx = await test721Token.connect(addr1).mint(1);
       const addr1Balance = await test721Token.balanceOf(addr1.address);
-      expect(addr1Balance.toNumber()).to.equal(1);
+      expect(await addr1Balance.toNumber()).to.equal(1);
 
       const trx2 = await testStakingController.connect(addr1).stake(0);
-
       await expect(test721Token.transferFrom(addr1.address, addr2.address, 0)).to.be.revertedWith("You can not transfer a staked token");
-
       const trx3 = await testStakingController.connect(addr1).unstake(0);
     });
-    
-
-  });  
-
-});
+});  

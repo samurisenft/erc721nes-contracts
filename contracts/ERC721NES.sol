@@ -21,7 +21,7 @@ abstract contract ERC721NES is ERC721A {
     // if this variable is set, stake / unstake can only be called from  
     // the stakingController if it is not set stake / unstake can be called  
     // directly on the implementing contract.
-    address stakingController;
+    address public stakingController;
 
     // Event published when a token is staked.
     event tokenStaked(uint256 tokenId);
