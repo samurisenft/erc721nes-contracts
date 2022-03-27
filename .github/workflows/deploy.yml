@@ -36,7 +36,7 @@ jobs:
     - run: npm version
     - run: npm publish --access public
       env:
-        NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+        NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
     - run: |
         git config --global user.name "ERC-721 NES"
         git config --global user.email "no-reply@dev.null"
