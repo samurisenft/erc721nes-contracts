@@ -62,6 +62,7 @@ abstract contract ERC721NES is ERC721A {
         );
         require(!isStaked(tokenId), "token is already staked");
         tokenToIsStaked[tokenId] = true;
+        emit tokenStaked(tokenId);
     }
 
     /**
@@ -80,6 +81,7 @@ abstract contract ERC721NES is ERC721A {
         require(isStaked(tokenId), "token isn't staked");
 
         tokenToIsStaked[tokenId] = false;
+        emit tokenUnstaked(tokenId);
     }
 
     /**
