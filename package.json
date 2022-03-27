@@ -13,7 +13,7 @@
     }
   ],
   "scripts": {
-		"deploy-patch": "git tag deploy-patch && git push origin deploy-patch && git tag -d deploy-patch"
+    "deploy-patch": "git tag deploy-patch && git push origin deploy-patch && git tag -d deploy-patch"
 	},
   "dependencies": {
     "@nomiclabs/hardhat-etherscan": "^3.0.0",
