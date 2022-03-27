@@ -74,7 +74,7 @@ We are always eager to improve and adopt new ideas, please feel free to make sug
 
 ## SmolSchool
 
-- **Author**
+- **Author**  
   [SmolVerse](https://www.smolverse.lol/)
 - **Description**  
   AFAIK, one of the first implementations of a "non-custodial staking" that we've found. This pattern continues to be adopted across the Treasure Ecosystem, and can be found in Bridgeworld's Legions as well.
