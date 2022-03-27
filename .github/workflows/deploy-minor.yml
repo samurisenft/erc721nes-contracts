@@ -1,0 +1,47 @@
+name: ERC-721 NES - Deploy Version (Minor)
+
+on:
+  push:
+    tags:
+      - deploy-minor
+
+jobs:
+  # Need to pull out "tests" into the Github Actions equivalent of CircleCI "orbs"
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x, 16.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci
+    - run: npx hardhat test
+  deploy:
+    needs: tests
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: master
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 16
+        registry-url: https://registry.npmjs.org/
+    - run: |
+        git config --global user.name "ERC-721 NES"
+        git config --global user.email "no-reply@dev.null"
+    - run: git push --delete origin deploy-minor
+    - run: npm ci
+    - run: cp contracts/ERC721NES.sol ./ERC721NES.sol
+    - run: npm version minor
+    - run: npm publish --access public
+      env:
+        NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+    - run: git push origin

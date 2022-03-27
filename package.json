@@ -18,7 +18,9 @@
     }
   ],
   "scripts": {
-    "deploy-patch": "git tag deploy-patch && git push origin deploy-patch && git tag -d deploy-patch"
+    "deploy-patch": "git tag deploy-patch && git push origin deploy-patch && git tag -d deploy-patch",
+    "deploy-minor": "git tag deploy-minor && git push origin deploy-minor && git tag -d deploy-minor",
+    "deploy-major": "git tag deploy-major && git push origin deploy-major && git tag -d deploy-major"
   },
   "dependencies": {
     "@nomiclabs/hardhat-etherscan": "^3.0.0",
