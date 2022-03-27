@@ -44,7 +44,7 @@ contract MyNFT is ERC721NES {
 
 # Building and installing locally
 1. Fork the repo 
-2. git clone <your fork url>
+2. git clone [your fork url]
 3. Star the project ;-)
 
 ```
