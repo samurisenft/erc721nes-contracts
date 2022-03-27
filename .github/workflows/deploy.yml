@@ -34,7 +34,7 @@ jobs:
         registry-url: https://registry.npmjs.org/
     - run: npm ci
     - run: cp contracts/ERC721NES.sol ./ERC721NES.sol
-    - run: npm version
+    - run: npm version patch
     - run: npm publish --access public
       env:
         NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
