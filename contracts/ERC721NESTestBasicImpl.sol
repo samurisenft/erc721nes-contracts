@@ -2,21 +2,10 @@
 // Creator: base64.tech
 pragma solidity ^0.8.9;
 
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "./ERC721NES.sol";
-import "hardhat/console.sol";
 
-/**
- *  @dev This is a sample implementation of a staking controller use in conjunction with
- *  an contract that implements ERC721NES. 
- *  
- *  This implementation captures the total duration staked for a given token either by
- *  block.timestamp or by block.number and provides a divisor to convert this value
- *  to a balance.
- */
-contract TestStakingController {
-    
-    // Address of the ERC721 token contract
-    address tokenContract;
+contract ERC721NESTestBasicImpl is ERC721NES, Ownable {
     // block number multiplier to determine the balance to accrue 
     // during the duration staked. Defaults to 1.
     uint256 multiplier = 1;
@@ -28,12 +17,11 @@ contract TestStakingController {
     // For each token, this map stores the total duration staked 
     // measured by block.number
     mapping(uint256 => uint256) public tokenToTotalDurationStaked;
-    
+
     /**
      *  @dev constructor 
      */
-     constructor(address _tokenContract, uint256 _multipler) {
-        tokenContract = _tokenContract;
+    constructor(uint256 _multipler) ERC721A("ERC721NESTestBasicImpl", "ERC721NESTestBasicImpl") {
         multiplier = _multipler;
     }
 
@@ -46,10 +34,9 @@ contract TestStakingController {
         } else {
             return 0;
         }
-
     }
 
-    /**
+     /**
      *  @dev returns total duration the token has been staked.
      */
     function getCumulativeDurationStaked(uint256 tokenId) public view returns (uint256){
@@ -63,24 +50,30 @@ contract TestStakingController {
         return getCumulativeDurationStaked(tokenId) * multiplier; // allows for toke accumulation at ~ 10 per hour
     }
 
+    
+
     /**
      *  @dev Stakes a token and records the start block number or time stamp.
      */
-    function stake(uint256 tokenId) public {
-        require(ERC721NES(tokenContract).ownerOf(tokenId) == msg.sender, "You are not the owner of this token");
+    function stakeToken(uint256 tokenId)  public   {
+        require(ownerOf(tokenId) == msg.sender, "You are not the owner of this token");
         
         tokenToWhenStaked[tokenId] = block.number;
-        ERC721NES(tokenContract).stake(tokenId, msg.sender);
+        stake(tokenId, msg.sender);
     }
 
     /**
      *  @dev Unstakes a token and records the start block number or time stamp.
      */
-    function unstake(uint256 tokenId) public {
-        console.log(ERC721NES(tokenContract).ownerOf(tokenId));
-        require(ERC721NES(tokenContract).ownerOf(tokenId) == msg.sender, "You are not the owner of this token");
+    function unstakeToken(uint256 tokenId) public {
+        require(ownerOf(tokenId) == msg.sender, "You are not the owner of this token");
 
         tokenToTotalDurationStaked[tokenId] += getCurrentAdditionalBalance(tokenId);
-        ERC721NES(tokenContract).unstake(tokenId, msg.sender);
+        unstake(tokenId, msg.sender);
     }
+
+    function mint(uint256 _quanity) external {
+        _mint(msg.sender,_quanity, '', false);
+    }
+
 }
