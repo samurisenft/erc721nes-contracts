@@ -40,7 +40,4 @@ jobs:
     - run: |
         git config --global user.name "ERC-721 NES"
         git config --global user.email "no-reply@dev.null"
-
-        git add package.json
-        git commit -m "release: update package.json"
         git push
