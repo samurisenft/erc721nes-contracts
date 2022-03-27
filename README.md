@@ -42,5 +42,5 @@ contract MyNFT is ERC721NES {
 }
 ```
 
-Contribute
+# Contribute
 We are always eager to improve and adopt new ideas, please feel free to make suggestions by raising a pull request.
