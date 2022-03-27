@@ -3,7 +3,7 @@
   "description": "ERC-721 NES, or Non Escrow Staking, is a novel implementation of a staking model that does not require the owner of a token to lock it into an escrow contract.",
   "keywords": ["solidity", "erc721", "nft", "smart contract"],
   "homepage": "https://erc721nes.org",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "contributors": [
     {
       "name" : "0xmikemikemike"
