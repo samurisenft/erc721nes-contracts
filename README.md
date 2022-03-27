@@ -42,6 +42,16 @@ contract MyNFT is ERC721NES {
 }
 ```
 
+# Building and installing locally
+1. Fork the repo 
+2. git clone <your fork url>
+3. Star the project ;-)
+
+```
+npm install
+npx hardhat test
+```
+
 # Contribute
 We are always eager to improve and adopt new ideas, please feel free to make suggestions by raising a pull request.
 
@@ -50,9 +60,3 @@ We are always eager to improve and adopt new ideas, please feel free to make sug
 3. Commit your Changes (git commit -m 'Add some AmazingFeature')
 4. Push to the Branch (git push origin feature/AmazingFeature)
 5. Open a Pull Request
-
-# Building and installing locally
-```
-npm install
-npx hardhat test
-```
