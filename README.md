@@ -29,13 +29,18 @@ address stakingController
 #Getting Started
 ##Integrate
 - Install ERC-721 NES as a dependency via NPM
+
 ```npm install @samurise/erc721nes```
+
 - Extend your ERC-721 contract using ERC721NES
-```import "@samurise/erc721nes/ERC721NES.sol";
+
+```
+import "@samurise/erc721nes/ERC721NES.sol";
 
 contract MyNFT is ERC721NES {
   // your ERC-721 code here
-}```
+}
+```
 
 Contribute
 We are always eager to improve and adopt new ideas, please feel free to make suggestions by raising a pull request.
