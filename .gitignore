@@ -9,4 +9,4 @@ artifacts/
 cache/
 node_modules/
 secrets.json*
-output.txt
+!secrets.json.stub
