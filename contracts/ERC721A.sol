@@ -3,14 +3,14 @@
 
 pragma solidity ^0.8.4;
 
-import '@openzeppelin/contracts/token/ERC721/IERC721.sol';
-import '@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol';
-import '@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol';
-import '@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol';
-import '@openzeppelin/contracts/utils/Address.sol';
-import '@openzeppelin/contracts/utils/Context.sol';
-import '@openzeppelin/contracts/utils/Strings.sol';
-import '@openzeppelin/contracts/utils/introspection/ERC165.sol';
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol";
+import "@openzeppelin/contracts/utils/Address.sol";
+import "@openzeppelin/contracts/utils/Context.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 
 error ApprovalCallerNotOwnerNorApproved();
 error ApprovalQueryForNonexistentToken();
@@ -40,7 +40,13 @@ error URIQueryForNonexistentToken();
  *
  * Assumes that an owner cannot have more than the 2**128 - 1 (max value of uint128) of supply
  */
-contract ERC721A is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable {
+contract ERC721A is
+    Context,
+    ERC165,
+    IERC721,
+    IERC721Metadata,
+    IERC721Enumerable
+{
     using Address for address;
     using Strings for uint256;
 
@@ -90,7 +96,12 @@ contract ERC721A is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable
     /**
      * @dev See {IERC721Enumerable-tokenByIndex}.
      */
-    function tokenByIndex(uint256 index) public view override returns (uint256) {
+    function tokenByIndex(uint256 index)
+        public
+        view
+        override
+        returns (uint256)
+    {
         if (index >= totalSupply()) revert TokenIndexOutOfBounds();
         return index;
     }
@@ -100,7 +111,12 @@ contract ERC721A is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable
      * This read function is O(totalSupply). If calling from a separate contract, be sure to test gas first.
      * It may also degrade with extremely large collection sizes (e.g >> 10000), test for your use case.
      */
-    function tokenOfOwnerByIndex(address owner, uint256 index) public view override returns (uint256) {
+    function tokenOfOwnerByIndex(address owner, uint256 index)
+        public
+        view
+        override
+        returns (uint256)
+    {
         if (index >= balanceOf(owner)) revert OwnerIndexOutOfBounds();
         uint256 numMintedSoFar = totalSupply();
         uint256 tokenIdsIdx;
@@ -129,7 +145,13 @@ contract ERC721A is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable
     /**
      * @dev See {IERC165-supportsInterface}.
      */
-    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC165, IERC165) returns (bool) {
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        virtual
+        override(ERC165, IERC165)
+        returns (bool)
+    {
         return
             interfaceId == type(IERC721).interfaceId ||
             interfaceId == type(IERC721Metadata).interfaceId ||
@@ -154,11 +176,15 @@ contract ERC721A is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable
      * Gas spent here starts off proportional to the maximum mint batch size.
      * It gradually moves to O(1) as tokens get transferred around in the collection over time.
      */
-    function ownershipOf(uint256 tokenId) internal view returns (TokenOwnership memory) {
+    function ownershipOf(uint256 tokenId)
+        internal
+        view
+        returns (TokenOwnership memory)
+    {
         if (!_exists(tokenId)) revert OwnerQueryForNonexistentToken();
 
         unchecked {
-            for (uint256 curr = tokenId;; curr--) {
+            for (uint256 curr = tokenId; ; curr--) {
                 TokenOwnership memory ownership = _ownerships[curr];
                 if (ownership.addr != address(0)) {
                     return ownership;
@@ -191,11 +217,20 @@ contract ERC721A is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable
     /**
      * @dev See {IERC721Metadata-tokenURI}.
      */
-    function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
+    function tokenURI(uint256 tokenId)
+        public
+        view
+        virtual
+        override
+        returns (string memory)
+    {
         if (!_exists(tokenId)) revert URIQueryForNonexistentToken();
 
         string memory baseURI = _baseURI();
-        return bytes(baseURI).length != 0 ? string(abi.encodePacked(baseURI, tokenId.toString())) : '';
+        return
+            bytes(baseURI).length != 0
+                ? string(abi.encodePacked(baseURI, tokenId.toString()))
+                : "";
     }
 
     /**
@@ -204,7 +239,7 @@ contract ERC721A is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable
      * by default, can be overriden in child contracts.
      */
     function _baseURI() internal view virtual returns (string memory) {
-        return '';
+        return "";
     }
 
     /**
@@ -214,7 +249,8 @@ contract ERC721A is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable
         address owner = ERC721A.ownerOf(tokenId);
         if (to == owner) revert ApprovalToCurrentOwner();
 
-        if (_msgSender() != owner && !isApprovedForAll(owner, _msgSender())) revert ApprovalCallerNotOwnerNorApproved();
+        if (_msgSender() != owner && !isApprovedForAll(owner, _msgSender()))
+            revert ApprovalCallerNotOwnerNorApproved();
 
         _approve(to, tokenId, owner);
     }
@@ -222,7 +258,12 @@ contract ERC721A is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable
     /**
      * @dev See {IERC721-getApproved}.
      */
-    function getApproved(uint256 tokenId) public view override returns (address) {
+    function getApproved(uint256 tokenId)
+        public
+        view
+        override
+        returns (address)
+    {
         if (!_exists(tokenId)) revert ApprovalQueryForNonexistentToken();
 
         return _tokenApprovals[tokenId];
@@ -231,7 +272,10 @@ contract ERC721A is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable
     /**
      * @dev See {IERC721-setApprovalForAll}.
      */
-    function setApprovalForAll(address operator, bool approved) public override {
+    function setApprovalForAll(address operator, bool approved)
+        public
+        override
+    {
         if (operator == _msgSender()) revert ApproveToCaller();
 
         _operatorApprovals[_msgSender()][operator] = approved;
@@ -241,7 +285,13 @@ contract ERC721A is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable
     /**
      * @dev See {IERC721-isApprovedForAll}.
      */
-    function isApprovedForAll(address owner, address operator) public view virtual override returns (bool) {
+    function isApprovedForAll(address owner, address operator)
+        public
+        view
+        virtual
+        override
+        returns (bool)
+    {
         return _operatorApprovals[owner][operator];
     }
 
@@ -264,7 +314,7 @@ contract ERC721A is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable
         address to,
         uint256 tokenId
     ) public virtual override {
-        safeTransferFrom(from, to, tokenId, '');
+        safeTransferFrom(from, to, tokenId, "");
     }
 
     /**
@@ -277,7 +327,8 @@ contract ERC721A is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable
         bytes memory _data
     ) public virtual override {
         _transfer(from, to, tokenId);
-        if (!_checkOnERC721Received(from, to, tokenId, _data)) revert TransferToNonERC721ReceiverImplementer();
+        if (!_checkOnERC721Received(from, to, tokenId, _data))
+            revert TransferToNonERC721ReceiverImplementer();
     }
 
     /**
@@ -292,7 +343,7 @@ contract ERC721A is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable
     }
 
     function _safeMint(address to, uint256 quantity) internal {
-        _safeMint(to, quantity, '');
+        _safeMint(to, quantity, "");
     }
 
     /**
@@ -349,7 +400,10 @@ contract ERC721A is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable
 
             for (uint256 i; i < quantity; i++) {
                 emit Transfer(address(0), to, updatedIndex);
-                if (safe && !_checkOnERC721Received(address(0), to, updatedIndex, _data)) {
+                if (
+                    safe &&
+                    !_checkOnERC721Received(address(0), to, updatedIndex, _data)
+                ) {
                     revert TransferToNonERC721ReceiverImplementer();
                 }
 
@@ -408,7 +462,8 @@ contract ERC721A is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable
             if (_ownerships[nextTokenId].addr == address(0)) {
                 if (_exists(nextTokenId)) {
                     _ownerships[nextTokenId].addr = prevOwnership.addr;
-                    _ownerships[nextTokenId].startTimestamp = prevOwnership.startTimestamp;
+                    _ownerships[nextTokenId].startTimestamp = prevOwnership
+                        .startTimestamp;
                 }
             }
         }
@@ -448,10 +503,18 @@ contract ERC721A is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable
         bytes memory _data
     ) private returns (bool) {
         if (to.isContract()) {
-            try IERC721Receiver(to).onERC721Received(_msgSender(), from, tokenId, _data) returns (bytes4 retval) {
+            try
+                IERC721Receiver(to).onERC721Received(
+                    _msgSender(),
+                    from,
+                    tokenId,
+                    _data
+                )
+            returns (bytes4 retval) {
                 return retval == IERC721Receiver(to).onERC721Received.selector;
             } catch (bytes memory reason) {
-                if (reason.length == 0) revert TransferToNonERC721ReceiverImplementer();
+                if (reason.length == 0)
+                    revert TransferToNonERC721ReceiverImplementer();
                 else {
                     assembly {
                         revert(add(32, reason), mload(reason))

@@ -17,8 +17,8 @@ import "./ERC721A.sol";
 abstract contract ERC721NES is ERC721A {
     // This is an optional reference to an external contract allows
     // you to abstract away your staking interface to another contract.
-    // if this variable is set, stake / unstake can only be called from  
-    // the stakingController if it is not set stake / unstake can be called  
+    // if this variable is set, stake / unstake can only be called from
+    // the stakingController if it is not set stake / unstake can be called
     // directly on the implementing contract.
     address public stakingController;
 
