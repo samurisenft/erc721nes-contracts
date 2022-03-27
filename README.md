@@ -46,7 +46,7 @@ contract MyNFT is ERC721NES {
 1. Fork the repo 
 2. git clone [your fork url]
 3. Star the project ;-)
-4. run locally
+4. Run these command locally:
 ```
 npm install
 npx hardhat test
