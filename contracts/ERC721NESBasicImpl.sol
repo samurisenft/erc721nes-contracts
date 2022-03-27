@@ -63,7 +63,7 @@ contract ERC721NESBasicImpl is ERC721NES, Ownable {
      *  @dev Returns the amount of tokens rewarded up until this point.
      */
     function getStakingRewards(uint256 tokenId) public view returns (uint256) {
-        return getCumulativeDurationStaked(tokenId) * multiplier; // allows for toke accumulation at ~ 10 per hour
+        return getCumulativeDurationStaked(tokenId) * multiplier;
     }
 
     /**

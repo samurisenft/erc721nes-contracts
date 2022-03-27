@@ -1,7 +1,5 @@
 // We import Chai to use its asserting functions here.
 const Web3 = require("web3");
-const { soliditySha3 } = require("web3-utils");
-const { privateKeyServerSide, infuraProjectId, mnemonic, etherscanApiKey } = require('../secrets.json');
 const { use, expect } = require("chai");
 const { ethers } = require("hardhat");
 
