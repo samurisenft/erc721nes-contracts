@@ -23,9 +23,9 @@ abstract contract ERC721NES is ERC721A {
     address public stakingController;
 
     // Event published when a token is staked.
-    event tokenStaked(uint256 tokenId);
+    event Staked(uint256 tokenId);
     // Event published when a token is unstaked.
-    event tokenUnstaked(uint256 tokenId);
+    event Unstaked(uint256 tokenId);
 
     // Mapping of tokenId storing its staked status
     mapping(uint256 => bool) public tokenToIsStaked;
@@ -60,8 +60,9 @@ abstract contract ERC721NES is ERC721A {
             "Originator is not the owner of this token"
         );
         require(!isStaked(tokenId), "token is already staked");
+
         tokenToIsStaked[tokenId] = true;
-        emit tokenStaked(tokenId);
+        emit Staked(tokenId);
     }
 
     /**
@@ -80,7 +81,7 @@ abstract contract ERC721NES is ERC721A {
         require(isStaked(tokenId), "token isn't staked");
 
         tokenToIsStaked[tokenId] = false;
-        emit tokenUnstaked(tokenId);
+        emit Unstaked(tokenId);
     }
 
     /**
@@ -93,6 +94,7 @@ abstract contract ERC721NES is ERC721A {
             startTokenId++;
             tokenToIsStaked[startTokenId] = true;
         }
+
         _safeMint(to, quantity, "");
     }
 
@@ -106,6 +108,7 @@ abstract contract ERC721NES is ERC721A {
             startTokenId++;
             tokenToIsStaked[startTokenId] = true;
         }
+
         _mint(to, quantity, "", false);
     }
 
@@ -121,6 +124,7 @@ abstract contract ERC721NES is ERC721A {
             isStaked(tokenId) == false,
             "You can not transfer a staked token"
         );
+
         super.transferFrom(from, to, tokenId);
     }
 
@@ -152,6 +156,7 @@ abstract contract ERC721NES is ERC721A {
             isStaked(tokenId) == false,
             "You can not transfer a staked token"
         );
+        
         super.safeTransferFrom(from, to, tokenId, _data);
     }
 }
