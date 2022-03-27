@@ -1,4 +1,4 @@
-#About this project
+# About this project
 
 ERC-721 NES, or Non Escrow Staking, is a novel implementation of a staking model that does not require the owner of a token to lock it into an escrow contract. What that means is the token never moves during the staking process, unlike traditional protocols where you receive a coupon to then redeem later for your staked tokens. Instead, the token is flagged as non transferrable for the entire staking duration. In this way, the owner of a token has zero exposure to the risk of a staking protocol being compromised and their tokens stolen.
 
@@ -8,7 +8,7 @@ Our hypothesis is that this distinction is an important one for blockchain gamin
 
 NES also offers other ancillary advantages, like being able to receive purchase offers on tokens from various marketplaces or being able to easily prove ownership of a token for things like Collab.Land, Premint or Twitter.
 
-#Implementation
+# Implementation
 
 ERC-721 NES provides an interface to staking protocols by decorating the prototypical ERC-721 contract with a few additional methods and maintaining one new piece of state. Now, instead of a custodial approach where the owner relinquishes all the power over their token, a signal based locking mechanism can be employed.
 
@@ -26,8 +26,8 @@ address stakingController
 // address of the staking contract
 ```
 
-#Getting Started
-##Integrate
+# Getting Started
+## Integrate
 - Install ERC-721 NES as a dependency via NPM
 
 ```npm install @samurise/erc721nes```
