@@ -23,6 +23,7 @@ jobs:
     - run: npm ci
     - run: npx hardhat test
   deploy:
+    needs: tests
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
