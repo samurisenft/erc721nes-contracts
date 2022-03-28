@@ -29,20 +29,21 @@ address stakingController
 ```
 
 # Getting Started
+
 ## Integrate
-- Install ERC-721 NES as a dependency via NPM
+- Install ERC-721 NES as a dependency via NPM  
+  ```
+  npm install erc721nes
+  ```
 
-```npm install erc721nes```
-
-- Extend your ERC-721 contract using ERC721NES
-
-```
-import "erc721nes/ERC721NES.sol";
-
-contract MyNFT is ERC721NES {
-  // your ERC-721 code here
-}
-```
+- Extend your ERC-721 contract using ERC721NES  
+  ```
+  import "erc721nes/ERC721NES.sol";
+  
+  contract MyNFT is ERC721NES {
+    // your ERC-721 code here
+  }
+  ```
 
 # Building and Installing Locally
 1. Fork the repo 
