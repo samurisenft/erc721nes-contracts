@@ -12,7 +12,7 @@ jobs:
         run: echo "$GITHUB_CONTEXT"
       - run: echo ${{ github.event.review.state }}
       - run: |
-        if [[ ${{ github.event.review.state }} == TRUE ]]; then
+        if [[ '${{ github.event.review.state }}' == 'approved' ]]; then
           exit 0
         else
           exit 1
