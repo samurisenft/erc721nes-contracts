@@ -1,0 +1,23 @@
+name: ERC-721 NES - Pull Requests
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  is_approved:
+    runs-on: ubuntu-latest
+    if: ${{ (github.event.review.state == 'approved') && (contains(github.event.pull_request.labels.*.name, 'test')) }}
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - run: echo ${{ github.event.review.state }}
+      - run: |
+        if [[ ${{ github.event.review.state }} ]]; then
+          exit 0
+        else
+          exit 1
+        fi
