@@ -44,4 +44,8 @@ jobs:
     - run: npm publish --access public
       env:
         NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+    - run: npm run generate:changelog
+    - run: |
+        git add CHANGELOG.md
+        git commit -m 'chore: update CHANGELOG.md'
     - run: git push origin
