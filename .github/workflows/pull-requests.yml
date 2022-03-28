@@ -8,7 +8,6 @@ on:
 jobs:
   is_approved:
     runs-on: ubuntu-latest
-    if: ${{ (github.event.review.state == 'approved') && (contains(github.event.pull_request.labels.*.name, 'test')) }}
     steps:
       - name: Dump GitHub context
         env:
