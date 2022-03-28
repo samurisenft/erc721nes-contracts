@@ -1,9 +1,6 @@
 name: ERC-721 NES - Pull Requests
 
-on:
-  pull_request:
-    branches:
-      - master
+on: [pull_request]
 
 jobs:
   is_approved:
