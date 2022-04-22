@@ -95,6 +95,7 @@ contract ERC721NESStakingController {
         tokenToTotalDurationStaked[tokenId] += getCurrentAdditionalBalance(
             tokenId
         );
+        tokenToWhenStaked[tokenId] = 0;
         ERC721NES(tokenContract).unstakeFromController(tokenId, msg.sender);
     }
 }
