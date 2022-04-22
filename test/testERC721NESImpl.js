@@ -79,5 +79,16 @@ describe("Token contract", function () {
 
     });
 
+    it("stake unstake stake accrues correctly", async function () {
+      expect(await test721Token.balanceOf(owner['address'])).to.equal(0);
+      let trx = await test721Token.mint(1);
+      trx = await testStakingController.stake(0);
+      expect(await test721Token.balanceOf(owner['address'])).to.equal(1);
+      await mineNBlocks(3);
+      await testStakingController.unstake(0);
+      await mineNBlocks(30);
+      expect(await testStakingController.getCumulativeDurationStaked(0)).to.equal(4);
+    });
+
 
 });  
